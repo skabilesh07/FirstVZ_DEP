@@ -1,15 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="open.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css">
     <title>Document</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #121212;
+            color: #f0f0f0;
+        }
+        h1 {
+            color: #4CAF50;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        form {
+            width: 40%;
+            padding: 20px;
+            border-radius: 8px;
+            
+            margin: 20px 0;
+        }
+        input[type="text"] {
+            width: calc(100% - 24px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #333;
+            color: #ffffff;
+        }
+        button {
+            width: auto;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border: none;
+            background-color: #4CAF50;
+            color: rgb(251, 251, 251);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
         }
         table {
             width: 100%;
@@ -18,44 +54,34 @@
         }
         th, td {
             padding: 12px;
-            border: 1px solid #ddd;
+            border: 1px solid #444;
             text-align: left;
         }
         th {
-            background-color: #f2f2f2;
-            cursor: pointer;
+            background-color: #1e1e1e; /* Matte black header */
+            color: #f0f0f0;
+            font-weight: bold;
         }
         tr:hover {
-            background-color: #f1f1f1;
-        }
-        th {
-            background-color: #4CAF50; 
-            color: white;
-            font-weight: bold; 
+            background-color: #333;
         }
     </style>
 </head>
 <body>
     <h1>EJS FILE</h1>
 
-    <!-- Display form regardless of 'users' -->
     <form action="/datatransfer" method="POST">
-        <input type="text" name="branchname" placeholder="BranchName" class="branchname">
-        <br>
-        <input type="text" class="Dependency" name="Dependency" placeholder="Dependency">
-        <br>
-        <input type="text" class="Change log" name="Change log" placeholder="Change log">
-        <br>
-        <input type="text" class="Ticket ID" name="Ticket ID" placeholder="Ticket ID">
-        <br>
-        <input type="text" class="Developer name" name="Developer name" placeholder="Developer name">
-        <br>
+        <input type="text" name="branchname" placeholder="BranchName" required>
+        <input type="text" name="Dependency" placeholder="Dependency" required>
+        <textarea name="Change log" placeholder="Change log" required rows="4" style="width: calc(100% - 24px); padding: 10px; margin: 10px 0; border: 1px solid #444; border-radius: 4px; background-color: #333; color: #f0f0f0;"></textarea>
+        <input type="text" name="Ticket ID" placeholder="Ticket ID" required>
+        <input type="text" name="Developer name" placeholder="Developer name" required>
         <button type="submit">SUBMIT</button>
     </form>
-    <!-- Display data list if 'users' has content -->
+
     <% if (users && users.length > 0) { %>
         <form id="approvalForm" action="/approved" method="POST">
-            <table>
+            <table id="dataTable" class="display">
                 <thead>
                     <tr>
                         <th><input type="checkbox" id="select-all" onclick="toggleAllCheckboxes(this)"></th>
@@ -83,20 +109,31 @@
                     <% }) %>
                 </tbody>
             </table>
+            <input type="text" name="version num" placeholder="Version number" required>
             <button type="submit" name="action" value="approve">Approve</button>
             <button type="submit" name="action" value="publish">Publish</button>
         </form>
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $('#dataTable').DataTable({
+                    "paging": true, // Enable pagination
+                    "searching": true, // Enable search filter
+                    "ordering": true, // Enable sorting
+                    "info": true // Show table information
+                });
+            });
+
+            function toggleAllCheckboxes(source) {
+                const checkboxes = document.querySelectorAll('.row-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = source.checked;
+                });
+            }
+        </script>
     <% } else { %>
         <p>No data available to display.</p>
     <% } %>
-
-    <script>
-        function toggleAllCheckboxes(source) {
-            const checkboxes = document.querySelectorAll('.row-checkbox');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = source.checked;
-            });
-        }
-    </script>
 </body>
 </html>
