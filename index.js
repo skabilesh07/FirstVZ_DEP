@@ -28,6 +28,7 @@ const updatedSchema = new mongoose.Schema({
     ChangeLog: String,
     TicketID: String,
     DeveloperName: String,
+    PRID:String,
     IsApproved: { type: Boolean, default: false },
     IsPublished: { type: Boolean, default: false },
     VersionNumber: { type: String, default: "" },
@@ -87,9 +88,10 @@ app.get("/display", async (req, res) => {
 
 app.post("/datatransfer", async (req, res) => {
     const { branchname, Dependency, "Change log": changeLog, "Ticket ID": ticketID, "Developer name": developerName } = req.body;
-
+    const req_prid=req.body["prid"];
+    console.log(req_prid);
     const newFormData = new FormData({ BranchName: branchname, Dependency, ChangeLog: changeLog, TicketID: ticketID, DeveloperName: developerName });
-    const updatedFormData = new UpdatedModel({ BranchName: branchname, Dependency, ChangeLog: changeLog, TicketID: ticketID, DeveloperName: developerName });
+    const updatedFormData = new UpdatedModel({ BranchName: branchname, Dependency, ChangeLog: changeLog, TicketID: ticketID, DeveloperName: developerName,PRID:req_prid });
 
     try {
         await newFormData.save();

@@ -18,12 +18,21 @@
             text-align: left;
             margin-bottom: 20px;
         }
-        form {
+        #form {
             width: 40%;
             padding: 20px;
             border-radius: 8px;
-            
+            display: block;
             margin: 20px 0;
+        }
+        #toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            background-color: #333;
+            color: #f0f0f0;
+            border-radius: 5px;
         }
         input[type="text"] {
             width: calc(100% - 24px);
@@ -68,16 +77,20 @@
     </style>
 </head>
 <body>
-    <h1>EJS FILE</h1>
+    <h1>SERVODESK VERSION CONTROL</h1>
 
-    <form action="/datatransfer" method="POST">
+    <form action="/datatransfer" method="POST" id="form">
         <input type="text" name="branchname" placeholder="BranchName" required>
         <input type="text" name="Dependency" placeholder="Dependency" required>
         <textarea name="Change log" placeholder="Change log" required rows="4" style="width: calc(100% - 24px); padding: 10px; margin: 10px 0; border: 1px solid #444; border-radius: 4px; background-color: #333; color: #f0f0f0;"></textarea>
         <input type="text" name="Ticket ID" placeholder="Ticket ID" required>
         <input type="text" name="Developer name" placeholder="Developer name" required>
+        <input type="text" name="prid" placeholder="PRID" required>
         <button type="submit">SUBMIT</button>
     </form>
+    <div id="toggle">
+        <button onclick="hideform()">HIDE</button>
+    </div>
 
     <% if (users && users.length > 0) { %>
         <form id="approvalForm" action="/approved" method="POST">
@@ -95,6 +108,7 @@
                         <th>Version Number</th>
                         <th>Approved Date</th>
                         <th>Published Date</th>
+                        <th>PR ID</th>
                         
                     </tr>
                 </thead>
@@ -112,7 +126,7 @@
                             <td><%= user.VersionNumber %></td>
                             <td><%= user.ApprovedDate %></td>
                             <td><%= user.PublishedDate %></td>
-
+                            <td><%= user.PRID %></td>
                         </tr>
                     <% }) %>
                 </tbody>
@@ -139,6 +153,10 @@
                     checkbox.checked = source.checked;
                 });
             }
+            function hideform(){
+            const form = document.getElementById("form");
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
         </script>
     <% } else { %>
         <p>No data available to display.</p>
