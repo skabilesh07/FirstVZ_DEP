@@ -92,6 +92,10 @@
                         <th>Developer Name</th>
                         <th>IsApproved</th>
                         <th>IsPublished</th>
+                        <th>Version Number</th>
+                        <th>Approved Date</th>
+                        <th>Published Date</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -105,6 +109,10 @@
                             <td><%= user.DeveloperName %></td>
                             <td><%= user.IsApproved %></td>
                             <td><%= user.IsPublished %></td>
+                            <td><%= user.VersionNumber %></td>
+                            <td><%= user.ApprovedDate %></td>
+                            <td><%= user.PublishedDate %></td>
+
                         </tr>
                     <% }) %>
                 </tbody>
